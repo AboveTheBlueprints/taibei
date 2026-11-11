@@ -130,11 +130,11 @@ function start(){
 function arrive(){
   while(S.year<VISITS[vi])growYear(S);
   S.used=0;S.log=[];
-  if(vi===VISITS.length-1)return finish();
   render();
 }
 function render(){
-  head.textContent=`第 ${S.year} 年，第 ${vi+1} 回来扫墓。`;
+  const lastV=vi===VISITS.length-1;
+  head.textContent=lastV?`第 ${S.year} 年，第 ${vi+1} 回，最后一回来扫墓。`:`第 ${S.year} 年，第 ${vi+1} 回来扫墓。`;
   draw(S);
   ctl.innerHTML='';
   const left=BR_PER-S.used;
@@ -144,7 +144,7 @@ function render(){
     ctl.appendChild(row);
   }
   const r3=document.createElement('div');r3.className='row';
-  r3.appendChild(btn('走，十年后再来',()=>{vi++;arrive()}));ctl.appendChild(r3);
+  r3.appendChild(lastV?btn('刷完了，走',finish):btn('走，十年后再来',()=>{vi++;arrive()}));ctl.appendChild(r3);
   msg.textContent=S.log.length?`这一回刷了：${S.log.join('、')}（还能刷 ${left} 下）`:`这一回能刷 ${BR_PER} 下。轻刷：只刷那个字周围的石面，不碰笔画槽。重刷：连槽里一起刷干净，槽会磨掉一层（深槽刻了三层，浅槽一层）。`;
 }
 function finish(){
